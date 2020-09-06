@@ -1,3 +1,4 @@
+const {resolve} = require('path');
 const {seller, goods, ratings} = require('./data.json');
 module.exports = {
   css: {
@@ -36,6 +37,15 @@ module.exports = {
           data: ratings,
         })
       })
-    }
-  }
+    },
+    port: 2889,
+    open: true,
+  },
+  publicPath: '/',
+  lintOnSave: false,
+  // chainWebpack(config) {
+  //   config.resolve.alias
+  //     .set('components', resolve(__dirname, 'src/components'))
+  //     .set('assets', resolve(__dirname, 'src/assets'))
+  // }
 }

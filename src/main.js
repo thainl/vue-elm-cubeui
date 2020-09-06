@@ -4,6 +4,7 @@ import App from './App.vue'
 
 import '@/assets/css/border.css'
 import '@/assets/css/common.css'
+import '@/assets/css/index.styl'
 
 Vue.config.productionTip = false
 
