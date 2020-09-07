@@ -5,30 +5,27 @@
 </template>
 
 <script>
+import { getSeller } from "@/api/index.js";
 import SellerHeader from "./components/SellerHeader/index";
 export default {
     name: "App",
     data() {
         return {
-            seller: {}
-        }
+            seller: {},
+        };
     },
     components: {
         SellerHeader,
     },
+    methods: {
+        _getSeller() {
+            getSeller().then((seller) => {
+                this.seller = seller;
+            });
+        },
+    },
     created() {
-        fetch('/api/seller').then(res=> {
-            if(res.ok){
-                return res.json();
-            }else {
-                return Promise.reject('请求失败');
-            }
-        }).then(data=> {
-            console.log(data);
-            this.seller = data.data;
-        }).catch(err=> {
-            throw err;
-        })
+        this._getSeller();
     },
 };
 </script>
