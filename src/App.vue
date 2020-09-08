@@ -7,6 +7,7 @@
 <script>
 import { getSeller } from "@/api/index.js";
 import SellerHeader from "./components/SellerHeader/index";
+import HeaderDetail from './components/Header-detail/index'
 export default {
     name: "App",
     data() {
@@ -16,6 +17,7 @@ export default {
     },
     components: {
         SellerHeader,
+        HeaderDetail
     },
     methods: {
         _getSeller() {

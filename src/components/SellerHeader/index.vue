@@ -28,13 +28,20 @@
         <div class="background">
             <img :src="seller.avatar" alt />
         </div>
+        <HeaderDetail :showDetail="showDetail" @closeSellerDetail="showDetail = false" :seller="seller"></HeaderDetail>
     </div>
 </template>
 
 <script>
 import TagIcon from "../TagIcon/index";
+import HeaderDetail from '../Header-detail/index'
 export default {
     name: "SellerHeader",
+    data() {
+        return {
+            showDetail: false
+        }
+    },
     props: {
         seller: {
             type: Object,
@@ -42,10 +49,13 @@ export default {
         },
     },
     methods: {
-        showSellerDetail() {},
+        showSellerDetail() {
+            this.showDetail = true;
+        },
     },
     components: {
         TagIcon,
+        HeaderDetail,
     },
 };
 </script>
