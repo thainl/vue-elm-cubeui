@@ -1,13 +1,19 @@
 <template>
     <div id="app">
         <SellerHeader :seller="seller"></SellerHeader>
+        <div class="tab-wrapper">
+            <SliderTab :tabs="tabs" :initialIndex="1"></SliderTab>
+        </div>
     </div>
 </template>
 
 <script>
 import { getSeller } from "@/api/index.js";
 import SellerHeader from "./components/SellerHeader/index";
-import HeaderDetail from './components/Header-detail/index'
+import SliderTab from "./components/SliderTab/index";
+import GoodList from "@/components/GoodList/index.vue";
+import Ratings from "@/components/Ratings/index.vue";
+import Seller from "@/components/Seller/index.vue";
 export default {
     name: "App",
     data() {
@@ -15,9 +21,33 @@ export default {
             seller: {},
         };
     },
+    computed: {
+        tabs() {
+            return [
+                {
+                    label: "商品",
+                    component: GoodList,
+                    data: {seller:this.seller},
+                },
+                {
+                    label: "评论",
+                    component: Ratings,
+                    data: {seller:this.seller},
+                },
+                {
+                    label: "商家",
+                    component: Seller,
+                    data: {seller:this.seller},
+                },
+            ];
+        },
+    },
     components: {
         SellerHeader,
-        HeaderDetail
+        SliderTab,
+        GoodList,
+        Ratings,
+        Seller,
     },
     methods: {
         _getSeller() {
@@ -32,4 +62,14 @@ export default {
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+body
+    font-size: 16px
+#app
+    display: flex
+    flex-direction: column
+    height: 100vh
+    width: 100vw
+    .tab-wrapper
+        flex: 1
+</style>

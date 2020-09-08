@@ -34,7 +34,7 @@
 
 <script>
 import TagIcon from "../TagIcon/index";
-import HeaderDetail from '../Header-detail/index'
+import HeaderDetail from '../HeaderDetail/index'
 export default {
     name: "SellerHeader",
     data() {
@@ -72,7 +72,7 @@ export default {
         position: relative
         display: flex
         align-items: center
-        padding: 24px 12px 17px 24px
+        padding: 24px 12px 18px 24px
         .avatar
             flex: 0 0 64px
             width: 64px
