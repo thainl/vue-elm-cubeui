@@ -65,6 +65,7 @@ export default {
 @import '~@/assets/css/variable.styl'
 .seller-header
     position: relative
+    flex-shrink 0
     overflow: hidden
     color: $color-white
     background: $color-background-ss

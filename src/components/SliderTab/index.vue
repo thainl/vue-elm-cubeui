@@ -16,11 +16,12 @@
                 :initial-index="index"
                 :auto-play="false"
                 :options="sliderOptions"
+                :showDots="false"
                 @change="sliderChange"
                 @scroll="sliderScroll"
             >
                 <cube-slide-item v-for="(tab, i) of tabs" :key="'tab'+i">
-                    <component :is="tab.component" :data="tab.data"></component>
+                    <component :is="tab.component" ref="sliderComponent" :data="tab.data"></component>
                 </cube-slide-item>
             </cube-slide>
         </div>
@@ -63,10 +64,16 @@ export default {
             },
         },
     },
-    
+    mounted() {
+        // 一开始是不会触发sliderChange事件，所以挂载后先执行一次获取数据
+        this.sliderChange(this.index);
+    },
     methods: {
         sliderChange(index) {
             this.index = index;
+            // 在slider页面滑动改变后获取组件需要的数据，不会造成性能浪费
+            const comp = this.$refs.sliderComponent[index];
+            comp.getData && typeof(comp.getData) === 'function' && comp.getData();
         },
         sliderScroll(pos) {
             let tabBarWidth = this.$refs.tabBar.$el.clientWidth, // tabBar宽度
@@ -90,4 +97,5 @@ export default {
             padding: 9px 0 10px
     .sliders
         flex: 1
+        overflow hidden
 </style>

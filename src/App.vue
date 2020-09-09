@@ -2,7 +2,7 @@
     <div id="app">
         <SellerHeader :seller="seller"></SellerHeader>
         <div class="tab-wrapper">
-            <SliderTab :tabs="tabs" :initialIndex="1"></SliderTab>
+            <SliderTab :tabs="tabs"></SliderTab>
         </div>
     </div>
 </template>
@@ -72,4 +72,11 @@ body
     width: 100vw
     .tab-wrapper
         flex: 1
+        max-width calc(100vh-137px)
+        overflow hidden
+        // position fixed
+        // top 137px
+        // left 0
+        // right 0
+        // bottom 0
 </style>
