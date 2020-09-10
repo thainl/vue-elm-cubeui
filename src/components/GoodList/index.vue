@@ -196,7 +196,7 @@ export default {
 .show-enter-active, .show-leave-active
     transition all .3s
 
-.show-enter, .show-leave-to
+.show-leave-to
     opacity 0
     transform scale(.4)
 

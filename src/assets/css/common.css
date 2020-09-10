@@ -80,3 +80,43 @@ html {
     font-family: "PingFang SC", "STHeitiSC-Light", "Helvetica-Light", arial,
         sans-serif;
 }
+
+@keyframes tada {
+    0% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1)
+    }
+
+    10%,
+    20% {
+        -webkit-transform: scale3d(.8, .8, .8) rotate(-6deg);
+        transform: scale3d(.8, .8, .8) rotate(-6deg)
+    }
+
+    30%,
+    40%,
+    50%,
+    90% {
+        -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(6deg);
+        transform: scale3d(1.1, 1.1, 1.1) rotate(6deg)
+    }
+
+    60%,
+    70%,
+    80% {
+        -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate(-6deg);
+        transform: scale3d(1.1, 1.1, 1.1) rotate(-6deg)
+    }
+
+    to {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1)
+    }
+}
+
+.tada {
+    -webkit-animation-name: tada;
+    animation-name: tada;
+    animation-duration: .4s;
+    animation-fill-mode: both;
+}

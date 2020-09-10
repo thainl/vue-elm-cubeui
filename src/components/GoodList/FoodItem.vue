@@ -14,13 +14,15 @@
                 <span class="now">￥{{food.price}}</span>
                 <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
             </div>
-            <div class="options-wrapper"><OptionsBtn :food="food" @ADD_FOOD="addFood"></OptionsBtn></div>
+            <div class="options-wrapper">
+                <OptionsBtn :food="food" @ADD_FOOD="addFood"></OptionsBtn>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import OptionsBtn from './OptionsBtn';
+import OptionsBtn from "./OptionsBtn";
 export default {
     props: {
         food: {
@@ -30,12 +32,12 @@ export default {
     },
     methods: {
         addFood(el) {
-            this.$emit('ADD_FOOD', el);
-        }
+            this.$emit("ADD_FOOD", el);
+        },
     },
     components: {
         OptionsBtn,
-    }
+    },
 };
 </script>
 
@@ -56,9 +58,9 @@ export default {
         flex: 1
         min-width: 0
         .food-name
-            margin: 2px 0 8px 0
-            height: 14px
-            line-height: 14px
+            margin-bottom: 8px
+            height: 16px
+            line-height: 18px
             font-size: $fontsize-medium
             color: $color-dark-grey
         .desc, .sell-info
