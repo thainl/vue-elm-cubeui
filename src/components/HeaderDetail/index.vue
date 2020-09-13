@@ -1,5 +1,5 @@
 <template>
-    <MaskWrapper v-if="showDetail">
+    <MaskWrapper v-if="showDetail" background='rgba(7,17,27,0.8)' opacity="1" z-index="30">
         <div class="header-detail">
             <div class="detail-main">
                 <div class="content">
@@ -65,9 +65,12 @@ export default {
 <style lang="stylus" scoped>
 @import '~@/assets/css/mixin.styl'
 @import '~@/assets/css/variable.styl'
+.mask-wrapper
+    backdrop-filter: blur(10px)
 .header-detail
     height: 100%
     width: 100%
+    color: $color-white
     .detail-main
         width: 100%
         min-height: 100%

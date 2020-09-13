@@ -17,6 +17,7 @@
                 :auto-play="false"
                 :options="sliderOptions"
                 :showDots="false"
+                direction="horizontal"
                 @change="sliderChange"
                 @scroll="sliderScroll"
             >

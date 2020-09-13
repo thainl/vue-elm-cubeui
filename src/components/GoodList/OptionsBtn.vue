@@ -1,13 +1,21 @@
 <template>
     <div class="options-btn">
         <transition name="move">
-            <button @click="decreaseFood" v-show="showDecreaseBtn" class="decrease-btn">
+            <button
+                @click.stop.prevent="decreaseFood"
+                v-show="showDecreaseBtn || food.count>0 "
+                class="decrease-btn"
+            >
                 <span class="inner icon-remove_circle_outline"></span>
             </button>
         </transition>
         <!-- -->
-        <div class="food-count"><span v-show="food.count>0">{{food.count}}</span></div>
-        <button @click="addFood" class="add-btn icon-add_circle"></button>
+        <div class="food-count">
+            <transition name="fade">
+                <span v-show="food.count>0">{{food.count}}</span>
+            </transition>
+        </div>
+        <button :key="food.name" @click.stop="addFood" class="add-btn icon-add_circle"></button>
     </div>
 </template>
 
@@ -21,8 +29,19 @@ export default {
     },
     data() {
         return {
-            showDecreaseBtn: false
-        }
+            showDecreaseBtn: false,
+        };
+    },
+    computed: {},
+    watch: {
+        food: {
+            deep: true,
+            handler: function (food) {
+                if (food.count <= 0) {
+                    this.showDecreaseBtn = false;
+                }
+            },
+        },
     },
     methods: {
         addFood(e) {
@@ -44,8 +63,9 @@ export default {
             if (this.food.count) {
                 this.food.count--;
             }
-            if(this.food.count === 0) {
+            if (this.food.count <= 0) {
                 this.showDecreaseBtn = false;
+                this.$emit("refreshScroll");
             }
         },
     },
@@ -67,7 +87,8 @@ export default {
         line-height: 24px
         font-size: $fontsize-large-xxx
         color: $color-blue
-        cursor pointer
+        cursor: pointer
+        background: transparent
         .inner
             display: block
             transition: all 0.4s
@@ -84,4 +105,9 @@ export default {
         transform: translateX(36px)
         .inner
             transform: rotate(180deg)
+
+    .fade-enter-active, .fade-leave-active
+        transition opacity .1s
+    .fade-enter, .fade-leave-to
+        opacity 0
 </style>

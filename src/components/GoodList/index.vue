@@ -8,7 +8,9 @@
                 v-if="GoodList.length"
             >
                 <template v-slot:bar="props">
-                    <!-- 插槽里使用cube-scroll-nav-bar组件，这个组件中还带有默认插槽 -->
+                    <!-- 插槽里使用cube-scroll-nav-bar组件，这个组件中还带有默认插槽
+                        txts为插槽的prop。默认等于labels
+                     -->
                     <cube-scroll-nav-bar
                         direction="vertical"
                         :labels="props.labels"
@@ -186,12 +188,12 @@ export default {
             padding-bottom 18px
 
     .cart-wrapper
-        position fixed
+        position absolute
         bottom 0
         left 0
         height 48px
         width 100%
-        z-index 2
+        z-index 22
 
 .show-enter-active, .show-leave-active
     transition all .3s

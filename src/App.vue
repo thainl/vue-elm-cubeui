@@ -66,17 +66,16 @@ export default {
 body
     font-size: 16px
 #app
-    display: flex
-    flex-direction: column
+    // display: flex
+    // flex-direction: column
     height: 100vh
     width: 100vw
     .tab-wrapper
-        flex: 1
-        max-width calc(100vh-137px)
+        // flex: 1
         overflow hidden
-        // position fixed
-        // top 137px
-        // left 0
-        // right 0
-        // bottom 0
+        position fixed
+        top 137px
+        left 0
+        right 0
+        bottom 0
 </style>

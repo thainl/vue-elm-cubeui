@@ -47,9 +47,6 @@ export default {
     height: 100%;
     width: auto;
     display: inline-block;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
     overflow: hidden;
 }
 
@@ -78,8 +75,8 @@ export default {
 .num-enter-active, .num-leave-active{
     transition: all .3s;
 }
-.num-leave-active {
-    position: absolute;
+.num-move {
+    transition: all .3s;
 }
 .num-enter,.num-leave-to {
     opacity: 0;

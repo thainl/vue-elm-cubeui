@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div class="mask-wrapper" @touchmove.stop.prevent>
+        <div class="mask-wrapper" @click.stop.prevent="handleClick" :style="{background,opacity, zIndex, height}" ref="mask" @touchmove="handleTouchMove" @touchstart="handleTouchStart">
             <slot></slot>
         </div>
     </transition>
@@ -8,15 +8,60 @@
 
 <script>
 export default {
-    data() {
-        return {
-            showMask: false,
-        };
+    props: {
+        zIndex: {
+            type: String | Number,
+            default: 20
+        },
+        background: {
+            type: String,
+            default: 'rgba(7,17,27,0.6)'
+        },
+        opacity: {
+            type: String | Number,
+            default: 1
+        },
+        height: {
+            type: String,
+            default: '100%'
+        },
+        width: {
+            type: String,
+            default: '100%'
+        },
+        selector: {
+            type: String,
+            default: 'body'
+        },
+        nextTick: {
+            type: Boolean,
+            default: true
+        }
+    },
+    methods: {
+        handleClick() {
+            // 点击蒙层向父组件发送自定义事件
+            this.$emit('clickMask');
+        },
+        handleTouchStart(e) {
+            this.StartX = e.changedTouches[0].pageX;
+            this.StartY = e.changedTouches[0].pageY;
+        },
+        handleTouchMove(e) {
+            let distanceX =Math.abs(this.StartX -  e.changedTouches[0].pageX);
+            let distanceY =Math.abs(this.StartY -  e.changedTouches[0].pageY);
+            if(distanceX > 15 && distanceX > distanceY) { // 阻止横向滑动
+                e.stopPropagation();
+            }
+            e.preventDefault();
+        }
     },
     mounted() {
-        this.$nextTick(() => {
-            document.body.appendChild(this.$el);
-        });
+        if(this.nextTick) {
+            this.$nextTick(() => {
+                document.querySelector(this.selector).appendChild(this.$el);
+            });
+        }
     },
 };
 </script>
@@ -27,18 +72,12 @@ export default {
     position: fixed
     top: 0
     left: 0
-    z-index: 99
     width: 100vw
     height: 100vh
     overflow-x: hidden
     overflow-y: auto
-    opacity: 1
-    color: $color-white
-    background: $color-background-s
-    backdrop-filter: blur(10px)
 .fade-enter-active, .fade-leave-active
     transition: all 0.5s
 .fade-enter, .fade-leave-to
-    opacity: 0
-    background: $color-background
+    opacity: 0 !important
 </style>
