@@ -1,5 +1,5 @@
 <template>
-    <MaskWrapper selector=".goods" v-show="showCartList" @clickMask="closeCartList">
+    <MaskWrapper :selector="selector" zIndex="21" v-show="showCartList" @clickMask="closeCartList">
         <transition name="slide-up">
             <div class="cart-list" v-show="showCartList" @click.stop>
                 <div class="head">
@@ -17,7 +17,7 @@
         <MaskWrapper
             selector="body"
             height="6.88rem"
-            v-show="showCartList"
+            v-show="showCartList && selector == '.goods'"
             @clickMask="closeCartList"
         ></MaskWrapper>
     </MaskWrapper>
@@ -38,6 +38,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        selector: {
+            type: String,
+            default: '.goods'
+        }
     },
     data() {
         return {};
@@ -65,7 +69,13 @@ export default {
         }
     },
     mounted() {
-        this.scroll = new BScroll(this.$refs.listContent);
+        this.$nextTick(() => {
+            if (!this.scroll) {
+                this.scroll = new BScroll(this.$refs.listContent, {
+                    click: true,
+                });
+            }
+        });
     },
     updated() {
     },

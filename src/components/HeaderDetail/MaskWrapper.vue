@@ -1,6 +1,13 @@
 <template>
     <transition name="fade">
-        <div class="mask-wrapper" @click.stop.prevent="handleClick" :style="{background,opacity, zIndex, height}" ref="mask" @touchmove="handleTouchMove" @touchstart="handleTouchStart">
+        <div
+            class="mask-wrapper"
+            @click.stop.prevent="handleClick"
+            :style="{background,opacity, zIndex, height}"
+            ref="mask"
+            @touchmove="handleTouchMove"
+            @touchstart="handleTouchStart"
+        >
             <slot></slot>
         </div>
     </transition>
@@ -11,55 +18,63 @@ export default {
     props: {
         zIndex: {
             type: String | Number,
-            default: 20
+            default: 20,
         },
         background: {
             type: String,
-            default: 'rgba(7,17,27,0.6)'
+            default: "rgba(7,17,27,0.6)",
         },
         opacity: {
             type: String | Number,
-            default: 1
+            default: 1,
         },
         height: {
             type: String,
-            default: '100%'
+            default: "100%",
         },
         width: {
             type: String,
-            default: '100%'
+            default: "100%",
         },
         selector: {
             type: String,
-            default: 'body'
+            default: "body",
         },
         nextTick: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
     methods: {
         handleClick() {
             // 点击蒙层向父组件发送自定义事件
-            this.$emit('clickMask');
+            this.$emit("clickMask");
         },
         handleTouchStart(e) {
             this.StartX = e.changedTouches[0].pageX;
             this.StartY = e.changedTouches[0].pageY;
         },
         handleTouchMove(e) {
-            let distanceX =Math.abs(this.StartX -  e.changedTouches[0].pageX);
-            let distanceY =Math.abs(this.StartY -  e.changedTouches[0].pageY);
-            if(distanceX > 15 && distanceX > distanceY) { // 阻止横向滑动
+            let distanceX = Math.abs(this.StartX - e.changedTouches[0].pageX);
+            let distanceY = Math.abs(this.StartY - e.changedTouches[0].pageY);
+            if (distanceX > 15 && distanceX > distanceY) {
+                // 阻止横向滑动
                 e.stopPropagation();
             }
             e.preventDefault();
-        }
+        },
     },
     mounted() {
-        if(this.nextTick) {
+        if (this.nextTick) {
             this.$nextTick(() => {
-                document.querySelector(this.selector).appendChild(this.$el);
+                if (document.querySelector(this.selector + ">.mask-wrapper") === null){
+                    try {
+                        document.querySelector(this.selector).appendChild(this.$el);
+                    } catch (error) {
+                        
+                    }
+                    
+                }
             });
         }
     },

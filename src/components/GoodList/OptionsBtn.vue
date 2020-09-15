@@ -2,7 +2,7 @@
     <div class="options-btn">
         <transition name="move">
             <button
-                @click.stop.prevent="decreaseFood"
+                @click.stop="decreaseFood"
                 v-show="showDecreaseBtn || food.count>0 "
                 class="decrease-btn"
             >
@@ -58,7 +58,7 @@ export default {
             this.showDecreaseBtn = true;
             this.$emit("ADD_FOOD", e.target); // 提交自定义事件触发小球动画
         },
-        decreaseFood() {
+        decreaseFood(e) {
             // 防止减到负数
             if (this.food.count) {
                 this.food.count--;

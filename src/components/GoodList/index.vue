@@ -10,7 +10,7 @@
                 <template v-slot:bar="props">
                     <!-- 插槽里使用cube-scroll-nav-bar组件，这个组件中还带有默认插槽
                         txts为插槽的prop。默认等于labels
-                     -->
+                    -->
                     <cube-scroll-nav-bar
                         direction="vertical"
                         :labels="props.labels"
@@ -26,7 +26,6 @@
                                         <Bubble :num="props.txt.count"></Bubble>
                                     </span>
                                 </transition>
-                                
                             </div>
                         </template>
                     </cube-scroll-nav-bar>
@@ -38,30 +37,46 @@
                     :title="item.name"
                 >
                     <div class="food-list-item" v-for="food of item.foods" :key="'f'+food.name">
-                        <FoodItem  :food="food" @ADD_FOOD="handleDropBall"></FoodItem>
+                        <div @click="handleClickFood(food)">
+                            <FoodItem :food="food" @ADD_FOOD="handleDropBall"></FoodItem>
+                        </div>
                     </div>
                 </cube-scroll-nav-panel>
             </cube-scroll-nav>
         </div>
         <div class="cart-wrapper">
-            <CartBar ref="CartBar" :selectedFoods="selectedFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></CartBar>
+            <CartBar
+                ref="CartBar"
+                :selectedFoods="selectedFoods"
+                :deliveryPrice="seller.deliveryPrice"
+                :minPrice="seller.minPrice"
+            ></CartBar>
         </div>
+        <FoodDetail
+            :showFoodDetail="showFoodDetail"
+            :food="clickedFood"
+            :selectedFoods="selectedFoods"
+            :deliveryPrice="seller.deliveryPrice"
+            :minPrice="seller.minPrice"
+            @close="showFoodDetail=false"
+        ></FoodDetail>
     </div>
 </template>
 
 <script>
 import { getGoods } from "@/api/index.js";
 import TagIcon from "../TagIcon/index";
-import FoodItem from './FoodItem';
-import Bubble from './Bubble';
-import CartBar from '../CartBar/index';
+import FoodItem from "./FoodItem";
+import Bubble from "./Bubble";
+import CartBar from "../CartBar/index";
+import FoodDetail from "../FoodDetail/index";
 export default {
     name: "Goodlist",
     props: {
         data: {
             type: Object,
-            default: {}
-        }
+            default: {},
+        },
     },
     data() {
         return {
@@ -70,6 +85,8 @@ export default {
                 click: false,
                 directionLockThreshold: 0,
             },
+            showFoodDetail: false,
+            clickedFood: {}, // 点击了哪个事物
         };
     },
     computed: {
@@ -92,16 +109,16 @@ export default {
         // 购物车里的商品
         selectedFoods() {
             let arr = [];
-            this.GoodList.forEach(item=> {
-                item.foods.forEach(food=> {
+            this.GoodList.forEach((item) => {
+                item.foods.forEach((food) => {
                     // 点添加按钮后会增加count属性
-                    if(food.count) {
+                    if (food.count) {
                         arr.push(food);
                     }
-                })
-            })
-            return arr
-        }
+                });
+            });
+            return arr;
+        },
     },
     methods: {
         getData() {
@@ -121,13 +138,18 @@ export default {
         // 触发小球动画
         handleDropBall(el) {
             this.$refs.CartBar.dropBall(el);
-        }
+        },
+        handleClickFood(food) {
+            this.clickedFood = food
+            this.showFoodDetail = true;
+        },
     },
     components: {
         TagIcon,
         FoodItem,
         Bubble,
         CartBar,
+        FoodDetail,
     },
 };
 </script>
@@ -146,77 +168,67 @@ export default {
         left: 0
         bottom: 48px
         .nav-bar-content
-            position relative
-            flex 1
-            text-align center
-            width 100%
-            white-space normal
+            position: relative
+            flex: 1
+            text-align: center
+            width: 100%
+            white-space: normal
             .tag-icon
-                vertical-align top
-                margin-right 4px
+                vertical-align: top
+                margin-right: 4px
             .num
-                position absolute
-                right -8px
-                top -10px
+                position: absolute
+                right: -8px
+                top: -10px
         >>> .cube-scroll-nav-bar-items
-            font-size 14px
-            width 80px
-            overflow hidden
+            font-size: 14px
+            width: 80px
+            overflow: hidden
             .cube-scroll-nav-bar-item
-                padding: 0 10px;
-                display: flex;
-                flex-wrap wrap
-                align-items: center;
-                height: 56px;
-                line-height: 14px;
-                font-size: 12px;
-                background: #f3f5f7;
+                padding: 0 10px
+                display: flex
+                flex-wrap: wrap
+                align-items: center
+                height: 56px
+                line-height: 14px
+                font-size: 12px
+                background: #f3f5f7
                 &.cube-scroll-nav-bar-item_active
-                    background #fff
-                    color #333
+                    background: #fff
+                    color: #333
         >>> .cube-scroll-nav-panel-title
-            padding-left: 14px;
-            height: 26px;
-            line-height: 26px;
-            border-left: 2px solid #d9dde1;
-            font-size: 12px;
-            color: #666;
-            background: #f3f5f7;
-
+            padding-left: 14px
+            height: 26px
+            line-height: 26px
+            border-left: 2px solid #d9dde1
+            font-size: 12px
+            color: #666
+            background: #f3f5f7
         .food-list-item
-            margin 18px
-            padding-bottom 18px
-
+            margin: 18px
+            padding-bottom: 18px
     .cart-wrapper
-        position absolute
-        bottom 0
-        left 0
-        height 48px
-        width 100%
-        z-index 22
-
+        position: absolute
+        bottom: 0
+        left: 0
+        height: 48px
+        width: 100%
+        z-index: 22
 .show-enter-active, .show-leave-active
-    transition all .3s
-
+    transition: all 0.3s
 .show-leave-to
-    opacity 0
-    transform scale(.4)
-
+    opacity: 0
+    transform: scale(0.4)
 .show-an
-    animation show .3s
-
-@keyframes show {
-    0% {
-        opacity 0
-        transform scale(.3)
-    }
-    82% {
-        opacity .8
-        transform scale(1.2)
-    }
-    100% {
-        opacity 1
-        transform scale(1)
-    }
-}
+    animation: show 0.3s
+@keyframes show
+    0%
+        opacity: 0
+        transform: scale(0.3)
+    82%
+        opacity: 0.8
+        transform: scale(1.2)
+    100%
+        opacity: 1
+        transform: scale(1)
 </style>

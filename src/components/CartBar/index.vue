@@ -7,10 +7,11 @@
                         <i
                             class="icon-shopping_cart"
                             :class="{highlight: totalCount>0, tada: cartIconShake}"
+                            ref="cartIcon"
                         ></i>
                     </div>
                     <transition name="show">
-                        <div class="num" v-show="totalCount && firstShowBubble">
+                        <div class="num" v-show="totalCount">
                             <Bubble :num="totalCount" :class="{'show-an': showBubble}"></Bubble>
                         </div>
                     </transition>
@@ -29,7 +30,7 @@
                 <div class="delivery-price">另需配送费￥{{deliveryPrice}} 元</div>
             </div>
             <div class="right">
-                <div class="pay-desc" :class="payClass" @click="handlePay">{{payDesc}}</div>
+                <div class="pay-desc" :class="payClass" @click.stop="handlePay">{{payDesc}}</div>
             </div>
         </div>
         <div class="animation-balls" ref="ball">
@@ -47,6 +48,7 @@
             ref="CartList"
             :selectedFoods="selectedFoods"
             :showCartList="showCartList"
+            :selector="selector"
             @hideCartList="handleHideCartList"
             @ADD_FOOD="dropBall($event)"
             @emptySelectedFoods="handleEmptySelectedFoods"
@@ -87,6 +89,9 @@ export default {
             type: Number,
             default: 0,
         },
+        selector: {
+            type: String,
+        },
     },
     data() {
         return {
@@ -94,7 +99,6 @@ export default {
             ballList: [],
             cartIconShake: false, // 购物车图片抖动效果
             showBubble: false, // 放大效果
-            firstShowBubble: false, // 第一次放大效果
             isSupportTextOrientation: true, // 是否兼容text-orientation属性
             showCartList: false, // 是否显示购物车列表
             showDialog: false,
@@ -117,9 +121,7 @@ export default {
                 (total, item) => total + item.count,
                 0
             );
-            count <= 0
-                ? ((this.firstShowBubble = false), (this.showCartList = false))
-                : "";
+            count <= 0 ? (this.showCartList = false) : "";
             return count;
         },
         // 购物车按钮的文字描述
@@ -176,32 +178,32 @@ export default {
             this.dropBall(el);
         },
         handlePay() {
-            if(this.totalPrice<this.minPrice) {
+            if (this.totalPrice < this.minPrice) {
                 return;
             }
             this.showDialog = true;
-            this.dialogType = 'alert';
-            this.dialogTitle = '支付';
-            this.dialogContent = '您需要支付￥'+ this.totalPrice +'元';
+            this.dialogType = "alert";
+            this.dialogTitle = "支付";
+            this.dialogContent = "您需要支付￥" + this.totalPrice + "元";
         },
         handleEmptySelectedFoods() {
             this.showDialog = true;
-            this.dialogType = 'confirm';
-            this.dialogTitle = '清空';
-            this.dialogContent = '您确定要清空购物车？';
+            this.dialogType = "confirm";
+            this.dialogTitle = "清空";
+            this.dialogContent = "您确定要清空购物车？";
         },
         handleDialogCancel() {
             this.showDialog = false;
         },
         handleDialogConfirm() {
-            if(this.dialogTitle === '清空') {
+            if (this.dialogTitle === "清空") {
                 this.clearSelectedFoods();
             }
             this.showDialog = false;
         },
         clearSelectedFoods() {
-            this.selectedFoods.forEach(food=> {
-                food.count=0;
+            this.selectedFoods.forEach((food) => {
+                food.count = 0;
             });
         },
         // 小球做动画
@@ -245,6 +247,7 @@ export default {
             middle.style.transform = middle.style.webkitTransform = `translateX(0px)`;
             inner.style.background = "#f96a40";
             el.addEventListener("transitionend", done, false); // 监听过渡完毕
+            
         },
         dropped(el) {
             const ball = this.droppingBallList.shift();
@@ -253,8 +256,12 @@ export default {
                 el.style.display = "none";
             }
             this.cartIconShake = true;
-            this.firstShowBubble = true;
             this.showBubble = true;
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => { // 图片动画状态归零
+                this.cartIconShake = false;
+                this.showBubble = false;
+            }, 400);
         },
     },
     created() {

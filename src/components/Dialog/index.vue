@@ -56,7 +56,10 @@ export default {
     },
     mounted() {
         this.$nextTick(()=> {
-            document.body.appendChild(this.$el);
+            if(document.body.querySelector('body>.dialog-mask') == null){
+
+                document.body.appendChild(this.$el);
+            }
         })
     },
 };
@@ -82,7 +85,7 @@ export default {
     width: 12.8rem;
     background: #fff;
     font-size: 0.64rem;
-    border-radius: 0.64rem;
+    border-radius: 0.24rem;
     transition: all 0.3s;
     overflow: hidden;
     animation-duration: 0.4s;
