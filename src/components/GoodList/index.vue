@@ -91,7 +91,7 @@ export default {
     },
     computed: {
         seller() {
-            return this.data.seller;
+            return this.data.seller || {};
         },
         // 存放每个分类的名称、type(是否有support图标)、选择的数量
         barTxts() {
@@ -124,7 +124,6 @@ export default {
         getData() {
             if (this.GoodList.length === 0) {
                 getGoods().then((goods) => {
-                    console.log(goods);
                     this.GoodList = goods;
                 });
             }

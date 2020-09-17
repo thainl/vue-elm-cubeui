@@ -1,7 +1,7 @@
 <template>
     <div class="rating-item">
         <div class="top">
-            <div class="date">{{rating.rateTime}}</div>
+            <div class="date">{{formatDate(rating.rateTime)}}</div>
             <div class="user">
                 <span class="name">{{rating.username}}</span>
                 <img :src="rating.avatar" class="avatar" alt />
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 export default {
     props: {
         rating: {
@@ -25,6 +26,11 @@ export default {
                 return {};
             },
         },
+    },
+    methods: {
+        formatDate(time) {
+            return dayjs(time).format('MM-DD HH:mm');
+        }
     },
 };
 </script>

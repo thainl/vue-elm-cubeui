@@ -1,7 +1,7 @@
 <template>
     <div class="food-detail" v-show="showMain">
         <transition name="slide">
-            <div v-show="showFoodDetail" class="food-wrapper" ref="foodWrapper">
+            <div v-show="showFoodDetail" class="food-wrapper" ref="scrollWrapper">
                 <div class="scroll-wrapper" style="margin-bottom:100px">
                     <div class="back" @click="closeFoodDetail">
                         <i class="icon-arrow_lift"></i>
@@ -185,16 +185,34 @@ export default {
         handleAddFood(el) {
             this.enterCart(el);
         },
+        bindEvent(el) {
+            // 滑动返回
+            el.addEventListener('touchstart', (e)=> {
+                this.startX = e.changedTouches[0].pageX;
+                this.startY = e.changedTouches[0].pageY;
+            }, false)
+            el.addEventListener('touchend', (e)=> {
+                let distancX =e.changedTouches[0].pageX -  this.startX ;
+                let distancY =e.changedTouches[0].pageY -  this.startY ;
+                if(Math.abs(distancX) > Math.abs(distancY)) {
+                    if(distancX > 30) {
+                        this.closeFoodDetail();
+                    }
+                }
+                
+            }, false)
+        }
     },
     mounted() {
         this.$nextTick(() => {
             document.body.appendChild(this.$el);
             if (!this.scroll) {
-                this.scroll = new BScroll(this.$refs.foodWrapper, {
+                this.scroll = new BScroll(this.$refs.scrollWrapper, {
                     click: true,
                 });
             }
         });
+        this.bindEvent(this.$refs.scrollWrapper);
     },
     components: {
         CartBar,
@@ -299,7 +317,7 @@ export default {
         .food-desc
             padding: 18px
             .text
-                line-height: 84px
+                line-height: 24px
                 padding: 0 8px
                 font-size: $fontsize-small
                 color: $color-grey

@@ -1,84 +1,195 @@
 <template>
-    <div>
-      <input type="number" v-model="num" step="1">
-      <Test :num="num"></Test>
-      <div class="scroll-wrapper">
-        <cube-scroll ref="scroll">
-          <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-            <li>4</li>
-            <li>5</li>
-            <li>6</li>
-            <li>7</li>
-            <li>8</li>
-            <li>9</li>
-            <li>10</li>
-            <li>11</li>
-            <li>12</li>
-            <li>13</li>
-            <li>14</li>
-            <li>15</li>
-            <li>16</li>
-            <li>17</li>
-            <li>18</li>
-            <li>19</li>
-            <li>20</li>
-            <li>21</li>
-            <li>22</li>
-            <li>23</li>
-            <li>24</li>
-            <li>25</li>
-            <li>26</li>
-            <li>27</li>
-            <li>28</li>
-            <li>29</li>
-            <li>30</li>
-            <li>31</li>
-            <li>32</li>
-            <li>33</li>
-            <li>34</li>
-            <li>35</li>
-            <li>36</li>
-            <li>37</li>
-            <li>38</li>
-            <li>39</li>
-            <li>40</li>
-            <li>41</li>
-            <li>42</li>
-            <li>43</li>
-            <li>44</li>
-            <li>45</li>
-            <li>46</li>
-            <li>47</li>
-            <li>48</li>
-            <li>49</li>
-            <li>50</li>
-          </ul>
-        </cube-scroll>
-      </div>
-    </div>
+    <cube-scroll :options="{click: false, directionLockThreshold: 0}" class="ratings-page" ref="scrollWrapper">
+        <div class="scroll-wrapper">
+            <div class="overview">
+                <div class="left">
+                    <h2 class="score">{{seller.score}}</h2>
+                    <div class="title">综合评分</div>
+                    <div class="rank">高于周边商家{{seller.rankRate}}%</div>
+                </div>
+                <div class="right">
+                    <div class="score-wrapper">
+                        <span class="score-type">服务态度</span>
+                        <Star :size="36" :score="seller.serviceScore"></Star>
+                        <span class="score-txt">{{seller.serviceScore}}</span>
+                    </div>
+                    <div class="score-wrapper">
+                        <span class="score-type">商品评分</span>
+                        <Star :size="36" :score="seller.foodScore"></Star>
+                        <span class="score-txt">{{seller.foodScore}}</span>
+                    </div>
+                    <div class="delivery-wrapper">
+                        <span class="title">送达时间</span>
+                        <span class="delivery">{{seller.deliveryTime}}分钟</span>
+                    </div>
+                </div>
+            </div>
+            <BlockBar></BlockBar>
+            <RatingSelect
+                v-if="computedRatings.length > 0"
+                :onlyContent="onlyContent"
+                :selectedType="selectedRatingType"
+                :ratings="ratings"
+                @changeRatingType="handleChangeRatingType"
+                @changeOnlyContent="handleChangeOnlyContent"
+            ></RatingSelect>
+            <ul class="rating-list">
+                <li v-for="(rating,i) of computedRatings" :key="'rl'+i">
+                    <ListItem :rating="rating"></ListItem>
+                </li>
+            </ul>
+        </div>
+    </cube-scroll>
 </template>
 
 <script>
-import Test from "../NumberScroll";
+const ALL = 2;
+import Star from "../Star/index";
+import BlockBar from "../FoodDetail/BlockBar";
+import ListItem from "./ListItem";
+import RatingSelect from "../FoodDetail/RatingSelect";
+import { getRatings } from "@/api/index.js";
 export default {
     name: "Ratings",
+    props: {
+        data: {
+            type: Object,
+            default() {
+                return {};
+            },
+        },
+    },
     data() {
         return {
-          num: 0
+            ratings: [],
+            onlyContent: true,
+            selectedRatingType: ALL,
         };
     },
+    computed: {
+        seller() {
+            return this.data.seller || {};
+        },
+        computedRatings() {
+            let arr = [];
+            this.ratings.forEach((rating) => {
+                if (this.onlyContent && !rating.text) {
+                    return;
+                }
+                if (
+                    this.selectedRatingType === ALL ||
+                    this.selectedRatingType === rating.rateType
+                ) {
+                    arr.push(rating);
+                }
+            });
+            this.$nextTick(()=> {
+                if(this.$refs.scrollWrapper.refresh) {
+                    this.$refs.scrollWrapper.refresh();
+                }
+            })
+            return arr;
+        },
+    },
+    methods: {
+        _getRatings() {
+            if (this.ratings.length === 0) {
+                getRatings().then((ratings) => {
+                    this.ratings = ratings;
+                });
+            }
+        },
+        handleChangeRatingType(type) {
+            this.selectedRatingType = type;
+        },
+        handleChangeOnlyContent() {
+            console.log(this.onlyContent);
+            // this.onlyContent = !this.onlyContent;
+            if(this.onlyContent) {
+                this.onlyContent = false;
+            }else {
+                this.onlyContent = true;
+            }
+            console.log(this.onlyContent);
+        },
+    },
+    created() {
+        this._getRatings();
+    },
+    mounted() {
+    },
     components: {
-      Test
-    }
+        Star,
+        BlockBar,
+        ListItem,
+        RatingSelect,
+    },
 };
 </script>
 
 <style lang="stylus" scoped>
-.scroll-wrapper
-  width 100%
-  max-height 200px
-  overflow hidden
+@import '~@/assets/css/variable.styl'
+.ratings-page
+    width: 100%
+    height: 100%
+    overflow: hidden
+    .overview
+        display: flex
+        padding: 18px 0
+        .left
+            flex-basis: 137px
+            padding: 6px 0
+            width: 137px
+            border-right: 1px solid $color-col-line
+            text-align: center
+            .score
+                margin-bottom: 6px
+                line-height: 28px
+                font-size: $fontsize-large-xxx
+                color: $color-orange
+            .title
+                margin-bottom: 8px
+                line-height: 12px
+                font-size: $fontsize-small
+                color: $color-dark-grey
+            .rank
+                line-height: 10px
+                font-size: $fontsize-small-s
+                color: $color-light-grey
+        .right
+            flex-grow: 1
+            padding: 6px 0 6px 24px
+            .score-wrapper
+                display: flex
+                align-items: center
+                margin-bottom: 8px
+                .score-type
+                    line-height: 18px
+                    font-size: $fontsize-small
+                    color: $color-dark-grey
+                .star-wrapper
+                    margin: 0 12px
+                .score-txt
+                    line-height: 18px
+                    font-size: $fontsize-small
+                    color: $color-orange
+            .delivery-wrapper
+                display: flex
+                align-items: center
+                .title
+                    line-height: 18px
+                    font-size: $fontsize-small
+                    color: $color-dary-grey
+                .delivery
+                    margin-left: 12px
+                    color: $color-light-grey
+                    font-size: $fontsize-small
+    .rating-select
+        padding 0 18px
+    .rating-list
+        padding: 0 18px
+        li
+            border-bottom: 1px solid #f6f7f7
+        &:last-child
+            border-bottom-color: transparent
 </style>
