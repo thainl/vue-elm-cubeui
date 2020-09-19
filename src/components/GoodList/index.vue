@@ -71,7 +71,7 @@ import Bubble from "./Bubble";
 import CartBar from "../CartBar/index";
 import FoodDetail from "../FoodDetail/index";
 export default {
-    name: "Goodlist",
+    name: "GoodList",
     props: {
         data: {
             type: Object,

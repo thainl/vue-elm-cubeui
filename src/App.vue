@@ -51,9 +51,11 @@ export default {
     },
     methods: {
         _getSeller() {
-            getSeller().then((seller) => {
-                this.seller = seller;
-            });
+            if(!this.seller.name) {
+                getSeller().then((seller) => {
+                    this.seller = seller;
+                });
+            }
         },
     },
     created() {
