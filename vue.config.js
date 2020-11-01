@@ -39,7 +39,6 @@ module.exports = {
       })
     },
     port: 2889,
-    open: true,
   },
   publicPath: '/',
   lintOnSave: false,
