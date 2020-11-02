@@ -1,6 +1,6 @@
 import axios from 'axios'
 const ERR_OK = 0; // errno 值为 0 则无错误
-const baseUrl = process.env.NODE_ENV === 'development' ? '' : 'http://ustbhuangyi.com/sell';
+const baseUrl = process.env.NODE_ENV === 'development' ? '/api' : 'https://www.fastmock.site/mock/c3b7c4acee8b6a728adff22d93f22881/elm';
 
 export function getUrl(url) {
   return function(options={}) {

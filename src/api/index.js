@@ -1,5 +1,5 @@
 import {getUrl} from './fetch';
 
-export const getSeller = getUrl('/api/seller');
-export const getGoods = getUrl('/api/goods');
-export const getRatings = getUrl('/api/ratings');
+export const getSeller = getUrl('/seller');
+export const getGoods = getUrl('/goods');
+export const getRatings = getUrl('/ratings');
