@@ -7,7 +7,7 @@ module.exports = {
       rootValue: 25,
       // 需要转换的属性 * 表示所有
       propList: ['*'],
-      // 忽略的文件夹
+      // 不转换的文件
       exclude: /common.css/gi
     }
   }
