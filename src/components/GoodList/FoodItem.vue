@@ -46,6 +46,7 @@ export default {
 .food-item
     display: flex
     position: relative
+    cursor pointer
     .food-icon
         flex-basis: 57px
         margin-right: 10px

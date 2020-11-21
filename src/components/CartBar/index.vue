@@ -271,7 +271,6 @@ export default {
         // 判断是否兼容text-orientation css属性
         if (document.body.style.textOrientation == undefined) {
             this.isSupportTextOrientation = false;
-            console.log(this.isSupportTextOrientation);
         }
     },
 };

@@ -136,6 +136,7 @@ export default {
         line-height: 28px
         padding: 0 8px
         background: $color-background-sss
+        cursor pointer
         .bulletin-title
             flex: 0 0 22px
             width: 22px

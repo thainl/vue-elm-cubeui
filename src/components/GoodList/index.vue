@@ -192,6 +192,7 @@ export default {
                 line-height: 14px
                 font-size: 12px
                 background: #f3f5f7
+                cursor pointer
                 &.cube-scroll-nav-bar-item_active
                     background: #fff
                     color: #333

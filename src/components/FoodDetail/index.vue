@@ -7,7 +7,7 @@
                         <i class="icon-arrow_lift"></i>
                     </div>
                     <div class="food-cover">
-                        <img :src="food.image" alt />
+                        <img :src="food.image" ref="foodCover" />
                     </div>
                     <div class="food-content">
                         <h2 class="food-name">{{food.name}}</h2>
@@ -119,6 +119,7 @@ export default {
                 positive: "推荐",
                 negative: "吐槽",
             },
+            time: 0, // 不能频繁点击加入购物车按钮
         };
     },
     computed: {
@@ -157,8 +158,10 @@ export default {
             if (val) {
                 this.showMain = val;
             } else {
-                setTimeout(() => {
+                clearTimeout(this.timer);
+                this.timer = setTimeout(() => {
                     this.showMain = val;
+                    this.$refs.foodCover.style.opacity = '0';
                 }, 380);
             }
         },
@@ -174,9 +177,14 @@ export default {
             this.onlyContent = !this.onlyContent;
         },
         addToCart(e) {
-            // 点击加入购物车按钮
-            this.$set(this.food, "count", 1);
-            this.enterCart(e.target);
+            if(Date.now() - this.time >= 400) {
+                // 点击加入购物车按钮
+                this.$set(this.food, "count", 1);
+                this.enterCart(e.target);
+                this.time = Date.now();
+            }else {
+                return;
+            }
         },
         enterCart(el) {
             // 触发购物车小球动画
@@ -213,6 +221,9 @@ export default {
             }
         });
         this.bindEvent(this.$refs.scrollWrapper);
+        this.$refs.foodCover.onload = function(){
+            this.style.opacity = '1';
+        }
     },
     components: {
         CartBar,
@@ -251,6 +262,7 @@ export default {
             z-index: 5
             border-radius: 50%
             background: $color-background-sss
+            cursor pointer
             .icon-arrow_lift
                 // position: absolute
                 display: block
@@ -262,13 +274,15 @@ export default {
             width: 100%
             height: 0
             padding-top: 100%
+            background-color #eee
             img
                 position: absolute
                 top: 0
                 left: 0
                 width: 100%
                 height: 100%
-                // object-fit: cover
+                opacity 0
+                transition opacity .3s
         .food-content
             position: relative
             padding: 18px
@@ -310,6 +324,7 @@ export default {
                 font-size: $fontsize-small-s
                 color: $color-white
                 background: $color-blue
+                cursor pointer
             .options-btn
                 position: absolute
                 bottom: 12px
@@ -334,7 +349,7 @@ export default {
                 color: $color-light-grey
                 text-align: center
     .cart-wrapper
-        position: absolute
+        position: fixed
         bottom: 0
         left: 0
         height: 48px

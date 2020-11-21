@@ -96,6 +96,7 @@ export default {
         >>> .cube-tab
             font-size: 16px
             padding: 9px 0 10px
+            cursor pointer
     .sliders
         flex: 1
         overflow hidden

@@ -79,6 +79,7 @@
             border-radius 1px
             font-size $fontsize-small
             color $color-grey
+            cursor pointer
             &.active
                 color: $color-white
             .count
@@ -104,6 +105,8 @@
         .icon-check_circle
             margin-right 4px
             font-size $fontsize-large-xxx
+            cursor pointer
         .text
             font-size $fontsize-small
+            cursor pointer
 </style>

@@ -57,6 +57,7 @@ export default {
     padding-top: 0.1em;
     box-sizing: border-box;
     overflow: hidden;
+    vertical-align: text-bottom;
 }
 
 .num span {
@@ -67,7 +68,7 @@ export default {
     text-align: center;
     writing-mode: vertical-lr;
     text-orientation: upright;
-    letter-spacing: 0.4em;
+    /* letter-spacing: 0.4em; */
     transform: translateY(0);
     transition: transform 0.3s;
 }
