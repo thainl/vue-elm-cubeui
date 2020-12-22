@@ -2,7 +2,7 @@
     <div class="options-btn">
         <transition name="move">
             <button
-                @click.stop="decreaseFood"
+                @click.stop.prevent="decreaseFood"
                 v-show="showDecreaseBtn || food.count>0 "
                 class="decrease-btn"
             >
@@ -32,7 +32,9 @@ export default {
             showDecreaseBtn: false,
         };
     },
-    computed: {},
+    mounted() {
+        this.flagTime = 0;
+    },
     watch: {
         food: {
             deep: true,
@@ -59,6 +61,7 @@ export default {
             this.$emit("ADD_FOOD", e.target); // 提交自定义事件触发小球动画
         },
         decreaseFood(e) {
+            if(Date.now() - this.flagTime < 50) return;
             // 防止减到负数
             if (this.food.count) {
                 this.food.count--;
@@ -67,6 +70,7 @@ export default {
                 this.showDecreaseBtn = false;
                 this.$emit("refreshScroll");
             }
+            this.flagTime = Date.now();
         },
     },
 };
