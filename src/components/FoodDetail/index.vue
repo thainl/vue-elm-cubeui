@@ -157,11 +157,13 @@ export default {
         showFoodDetail(val) {
             if (val) {
                 this.showMain = val;
+                this.$refs.foodCover.src = this.food.image;
             } else {
                 clearTimeout(this.timer);
                 this.timer = setTimeout(() => {
                     this.showMain = val;
                     this.$refs.foodCover.style.opacity = '0';
+                    this.$refs.foodCover.src = '';
                 }, 380);
             }
         },
